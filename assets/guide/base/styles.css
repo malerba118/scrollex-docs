@@ -1,0 +1,25 @@
+body {
+  margin: 0;
+}
+
+.h-screen {
+  height: 100vh;
+}
+
+.w-screen {
+  height: 100vh;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.w-full {
+  height: 100%;
+}
+
+.children-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

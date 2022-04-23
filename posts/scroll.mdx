@@ -3,7 +3,7 @@ import InlineCode from "../components/InlineCode";
 import FileAction from "../components/FileAction";
 import CodeBlock from "../components/CodeBlock";
 import CodeSection, { CodeSectionProvider } from "../components/CodeSection";
-import { getAppWithCustomStiffness } from "../components/utils";
+import * as files from "../components/files";
 
 <CodeSectionProvider>
 <CodeSection>
@@ -13,7 +13,7 @@ import { getAppWithCustomStiffness } from "../components/utils";
 react-scrollex let's you create beautiful scroll experiences with minimal code.
 
 </CodeSection>
-<CodeSection>
+<CodeSection files={files.base}>
 
 To create a new scroll experience, we'll need to start with a `Scroll.Container`.
 
@@ -29,7 +29,7 @@ However, we can't just put any content in our scroll container.
 The `Scroll.Container` component only accepts `Scroll.Section` components as immediate children.
 
 </CodeSection>
-<CodeSection>
+<CodeSection files={files.sectionOne}>
 
 So what we want to do is partition our content in to different sections.
 

@@ -37,7 +37,17 @@ const mdxComponents = {
 const Home: NextPage = () => {
   return (
     <SandpackThemeProvider theme="sandpack-dark">
-      <Box h="64px" borderBottom="1px solid rgba(255,255,255, .1)"></Box>
+      <Box
+        h="64px"
+        borderBottom="1px solid rgba(255,255,255, .1)"
+        px={6}
+        display="flex"
+        alignItems="center"
+      >
+        <Heading color="white" fontSize="2xl" fontFamily="limelight">
+          Scrollex
+        </Heading>
+      </Box>
       <Project>
         <Box>
           <TutorialMdx components={mdxComponents} />

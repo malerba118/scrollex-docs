@@ -49,7 +49,7 @@ function __rest(s, e) {
   return t;
 }
 
-const useParallaxLayoutManager = ({ scrollAxis }) => {
+const useScrollLayoutManager = ({ scrollAxis }) => {
   let [container, setContainer] = useState({
     x: 0,
     y: 0,
@@ -285,31 +285,19 @@ class LayoutContainer {
   }
 }
 
-const ParallaxContext = createContext(null);
-const useParallaxApi = () => {
-  const context = useContext(ParallaxContext);
-  if (!context) {
-    throw new Error(
-      "useParallaxApi can only be used inside of a Parallax.Container"
-    );
-  }
-  return context;
+const ScrollContainerContext = createContext(null);
+const useScrollContainer = () => {
+  return useContext(ScrollContainerContext);
 };
 const Container = (_a) => {
-  var { scrollAxis = "y", height, width, throttleAmount = 90, children } = _a,
-    otherProps = __rest(_a, [
-      "scrollAxis",
-      "height",
-      "width",
-      "throttleAmount",
-      "children",
-    ]);
+  var { scrollAxis = "y", throttleAmount = 90, children } = _a,
+    otherProps = __rest(_a, ["scrollAxis", "throttleAmount", "children"]);
   const containerRef = useObservableRef(null);
-  const layoutManager = useParallaxLayoutManager({ scrollAxis });
+  const layoutManager = useScrollLayoutManager({ scrollAxis });
   useResizeObserver(containerRef, (entry) => {
     layoutManager.setContainerRect(getRect(entry.target));
   });
-  const parallaxApi = useMemo(
+  const scrollContainerApi = useMemo(
     () => ({
       scrollAxis,
       layoutManager,
@@ -318,19 +306,20 @@ const Container = (_a) => {
     [scrollAxis, layoutManager, throttleAmount]
   );
   return React__default.createElement(
-    ParallaxContext.Provider,
-    { value: parallaxApi },
+    ScrollContainerContext.Provider,
+    { value: scrollContainerApi },
     React__default.createElement(
       ScrollProvider,
       Object.assign({}, otherProps, {
-        style: {
-          position: "relative",
-          whiteSpace: "nowrap",
-          height,
-          width,
-          overflowX: scrollAxis === "x" ? "auto" : "hidden",
-          overflowY: scrollAxis === "y" ? "auto" : "hidden",
-        },
+        style: Object.assign(
+          {
+            position: "relative",
+            whiteSpace: "nowrap",
+            overflowX: scrollAxis === "x" ? "auto" : "hidden",
+            overflowY: scrollAxis === "y" ? "auto" : "hidden",
+          },
+          otherProps.style
+        ),
         ref: containerRef,
       }),
       children
@@ -368,27 +357,37 @@ function styleInject(css, ref) {
 }
 
 var css_248z =
-  ".Section-module_heightFull__nfUym {\n  height: 100%;\n}\n\n.Section-module_widthFull__T-u3T {\n  width: 100%;\n}\n";
+  ".Section-module_heightFull__nfUym {\n  height: 100%;\n}\n\n.Section-module_widthFull__T-u3T {\n  width: 100%;\n}\n\n.Section-module_block__TWQV- {\n  display: block;\n}\n\n.Section-module_inlineBlock__Q099P {\n  display: inline-block;\n}\n";
 var styles = {
   heightFull: "Section-module_heightFull__nfUym",
   widthFull: "Section-module_widthFull__T-u3T",
+  block: "Section-module_block__TWQV-",
+  inlineBlock: "Section-module_inlineBlock__Q099P",
 };
 styleInject(css_248z);
 
 const SectionContext = createContext(null);
 const useSection = () => {
-  const context = useContext(SectionContext);
-  if (!context) {
-    throw new Error("useSection can only be used inside of a Parallax.Section");
-  }
-  return context;
+  return useContext(SectionContext);
 };
 const Section = (_a) => {
   var { showOverflow = false, children, className } = _a,
     otherProps = __rest(_a, ["showOverflow", "children", "className"]);
   const sectionRef = useObservableRef(null);
   const [sectionId] = useState(() => nanoid());
-  const { layoutManager, scrollAxis } = useParallaxApi();
+  const container = useScrollContainer();
+  const section = useSection();
+  if (section !== null) {
+    throw new Error(
+      "Scroll.Section cannot be nested within another Scroll.Section"
+    );
+  }
+  if (container === null) {
+    throw new Error(
+      "Scroll.Section can only be used within a Scroll.Container"
+    );
+  }
+  const { layoutManager, scrollAxis } = container;
   useResizeObserver(sectionRef, (entry) => {
     layoutManager.setSectionRect(sectionId, getRect(entry.target));
   });
@@ -408,8 +407,10 @@ const Section = (_a) => {
     const classes = [className];
     if (scrollAxis === "x") {
       classes.push(styles.heightFull);
+      classes.push(styles.inlineBlock);
     } else {
       classes.push(styles.widthFull);
+      classes.push(styles.block);
     }
     return classes.join(" ");
   }, [scrollAxis, className]);
@@ -426,7 +427,6 @@ const Section = (_a) => {
             position: "relative",
             visibility: isReady ? "visible" : "hidden",
             overflow: showOverflow ? "visible" : "hidden",
-            display: scrollAxis === "y" ? "block" : "inline-block",
             whiteSpace: "normal",
           },
           otherProps.style
@@ -595,15 +595,22 @@ const Springs = ({ keyframes, springConfigs, data, onSprings }) => {
     _z,
     _0,
     _1;
-  const { layoutManager, scrollAxis, throttleAmount } = useParallaxApi();
-  const { sectionId } = useSection();
+  const container = useScrollContainer();
+  const section = useSection();
   const scroll = useScroll();
+  if (!section) {
+    throw new Error("Springs can only be used inside of a Scroll.Section");
+  }
+  if (container === null) {
+    throw new Error("Springs can only be used within a Scroll.Container");
+  }
+  const { layoutManager, scrollAxis, throttleAmount } = container;
   // section dependencies include section and container rects
   const animations = useMemo(() => {
     const keyframesMap = processKeyframes(
       keyframes,
       layoutManager.layout,
-      sectionId,
+      section.sectionId,
       data
     );
     return {
@@ -907,11 +914,14 @@ const Item = (_a) => {
   var { keyframes = {}, springs: springConfigs = {}, data } = _a,
     otherProps = __rest(_a, ["keyframes", "springs", "data"]);
   const [springs, setSprings] = useState({});
-  const { isReady } = useSection();
+  const section = useSection();
+  if (!section) {
+    throw new Error("Scroll.Item can only be used within a Scroll.Section");
+  }
   return React__default.createElement(
     React__default.Fragment,
     null,
-    isReady &&
+    section.isReady &&
       React__default.createElement(Springs, {
         keyframes: keyframes,
         springConfigs: springConfigs,
@@ -941,11 +951,11 @@ const Item = (_a) => {
   );
 };
 
-const Parallax = {
+const Scroll = {
   Container,
   Section,
   Item,
 };
 
-export { Parallax };
+export { Scroll };
 //# sourceMappingURL=index.esm.js.map

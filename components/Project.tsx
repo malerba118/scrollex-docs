@@ -13,7 +13,7 @@ import {
 } from "@codesandbox/sandpack-react";
 import "@codesandbox/sandpack-react/dist/index.css";
 import { Box, Stack } from "@chakra-ui/react";
-import files from "./files";
+import * as files from "./files";
 import ScrollContainer from "./ScrollContainer";
 import useCustomTheme from "../hooks/useCustomTheme";
 
@@ -46,7 +46,7 @@ const Project: FC<ProjectProps> = ({ children }) => {
   const { theme } = useCustomTheme(themeOverrides);
 
   return (
-    <SandpackProvider customSetup={{ files }} template="react">
+    <SandpackProvider customSetup={{ files: files.base }} template="react">
       <ScrollContainer h="calc(100vh - 64px)" w="53vw">
         {children}
       </ScrollContainer>

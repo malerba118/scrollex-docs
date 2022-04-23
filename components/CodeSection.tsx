@@ -1,21 +1,13 @@
-import React, { createContext, FC, useContext, useState } from "react";
-import { Button, Flex, Stack, Tag, Icon } from "@chakra-ui/react";
-import {
-  SandpackThemeProvider,
-  useSandpack,
-  useSandpackTheme,
-} from "@codesandbox/sandpack-react";
-import { formatFilePath, SandpackLanguageSupport } from "./utils";
-import { EditorState } from "@codemirror/state";
-import { EditorView } from "@codemirror/view";
-import { lineNumbers } from "@codemirror/gutter";
-import {
-  getCodeMirrorLanguage,
-  getEditorTheme,
-  getSyntaxHighlight,
-} from "./utils";
+import React, {
+  createContext,
+  FC,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { useSandpack } from "@codesandbox/sandpack-react";
+import { nanoid } from "nanoid";
 import { Box } from "@chakra-ui/react";
-import { RiFileEditLine } from "react-icons/ri";
 import { motion } from "framer-motion";
 
 const MotionBox = motion(Box);
@@ -41,14 +33,32 @@ export const CodeSectionProvider: FC<any> = ({ children }) => {
   );
 };
 
+const timeout = async (ms: number) =>
+  new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+
 const CodeSection: FC<CodeSectionProps> = ({
-  files,
+  files = {},
   disablePadding,
   ...otherProps
 }) => {
   const { sandpack } = useSandpack();
-  const [id] = useState(() => String(Math.random()));
+  const [id] = useState(() => nanoid());
   const section = useContext(CodeSectionContext);
+
+  const updateFiles = async (files: any) => {
+    for (const filePath in files) {
+      sandpack.updateFile(filePath, files[filePath]);
+      await timeout(0);
+    }
+  };
+
+  useEffect(() => {
+    if (section?.selected === id) {
+      updateFiles(files);
+    }
+  }, [section?.selected, JSON.stringify(files)]);
 
   return (
     <MotionBox
