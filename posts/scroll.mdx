@@ -1,0 +1,99 @@
+import { Wrap, Box } from "@chakra-ui/react";
+import InlineCode from "../components/InlineCode";
+import FileAction from "../components/FileAction";
+import CodeBlock from "../components/CodeBlock";
+import CodeSection, { CodeSectionProvider } from "../components/CodeSection";
+import { getAppWithCustomStiffness } from "../components/utils";
+
+<CodeSectionProvider>
+<CodeSection>
+
+# Guide
+
+react-scrollex let's you create beautiful scroll experiences with minimal code.
+
+</CodeSection>
+<CodeSection>
+
+To create a new scroll experience, we'll need to start with a `Scroll.Container`.
+
+The `Scroll.Container` will hold all of our scrollable content.
+
+```jsx
+<Scroll.Container scrollAxis="y" className="h-screen">
+  {/* content... */}
+</Scroll.Container>
+```
+
+However, we can't just put any content in our scroll container.
+The `Scroll.Container` component only accepts `Scroll.Section` components as immediate children.
+
+</CodeSection>
+<CodeSection>
+
+So what we want to do is partition our content in to different sections.
+
+This will enable us to identify important keyframes as we're scrolling through the container's content.
+For example when the top of a section intersects the top of the container, we might want to define some scroll behavior.
+
+```jsx
+<Scroll.Container scrollAxis="y" className="h-screen">
+  <Scroll.Section className="h-full children-center">
+    <h1>Page One</h1>
+  </Scroll.Section>
+  <Scroll.Section className="h-full children-center">
+    <h1>Page Two</h1>
+  </Scroll.Section>
+  <Scroll.Section className="h-full children-center">
+    <h1>Page Three</h1>
+  </Scroll.Section>
+</Scroll.Container>
+```
+
+At this point, you'll notice we just have a static page with no motion. In general we recommend first building the static layout, and then adding motion where you see fit.
+So let's go ahead and add some motion to the example.
+
+</CodeSection>
+<CodeSection>
+
+To do this we'll use the `Scroll.Item` component and pass keyframes to our scroll items.
+
+```jsx
+const keyframes = {
+  banner: {
+    0: {
+      rotateZ: "0deg",
+    },
+    500: {
+      rotateZ: "180deg",
+    },
+  },
+};
+
+<Scroll.Container scrollAxis="y" className="h-screen">
+  <Scroll.Section className="h-full children-center">
+    <Scroll.Item keyframes={keyframes.banner}>
+      <h1>Page One</h1>
+    </Scroll.Item>
+  </Scroll.Section>
+  <Scroll.Section className="h-full children-center">
+    <h1>Page Two</h1>
+  </Scroll.Section>
+  <Scroll.Section className="h-full children-center">
+    <h1>Page Three</h1>
+  </Scroll.Section>
+</Scroll.Container>;
+```
+
+These keyframes define how an element should look as the user scrolls through the content.
+
+In the above example, we define behavior such that when the user has not scrolled, the banner does not have any rotation applied.
+
+However, once the user has scrolled 500px through the available scroll region, then the heading should have a rotation of 180deg applied.
+
+So then what will the rotation be when the user has scrolled 250px?
+
+Well it turns out it will be 90deg because scrollex uses linear interpolation to transition between keyframes.
+
+</CodeSection>
+</CodeSectionProvider>
