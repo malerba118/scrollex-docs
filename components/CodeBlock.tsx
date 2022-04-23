@@ -28,6 +28,7 @@ interface CodeBlockProps {
 const themeOverrides = {
   typography: {
     monoFont: "Ubuntu Mono",
+    bodyFont: "Poppins",
     fontSize: "1rem",
   },
   palette: {
@@ -38,9 +39,9 @@ const themeOverrides = {
   syntax: {
     tag: "var(--chakra-colors-pink-300)",
     keyword: "var(--chakra-colors-purple-300)",
-    property: "var(--chakra-colors-purple-100)",
+    property: "var(--chakra-colors-purple-200)",
     string: "var(--chakra-colors-orange-200)",
-    plain: "var(--chakra-colors-cyan-300)",
+    plain: "var(--chakra-colors-pink-100)",
   },
 };
 

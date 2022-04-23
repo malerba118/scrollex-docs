@@ -8,8 +8,10 @@ const InlineCode: FC<InlineCodeProps> = ({ ...props }) => {
     <Code
       verticalAlign="middle"
       bg="whiteAlpha.100"
+      color="pink.200"
       h="30px"
       px={2}
+      mx={0.5}
       rounded="md"
       display="inline-flex"
       alignItems="center"

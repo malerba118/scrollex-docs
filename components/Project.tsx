@@ -24,6 +24,7 @@ interface ProjectProps {
 const themeOverrides: SandpackPartialTheme = {
   typography: {
     monoFont: "Ubuntu Mono",
+    bodyFont: "Poppins",
     fontSize: "1rem",
   },
   palette: {
@@ -36,9 +37,9 @@ const themeOverrides: SandpackPartialTheme = {
   syntax: {
     tag: "var(--chakra-colors-pink-300)",
     keyword: "var(--chakra-colors-purple-300)",
-    property: "var(--chakra-colors-purple-100)",
+    property: "var(--chakra-colors-purple-200)",
     string: "var(--chakra-colors-orange-200)",
-    plain: "var(--chakra-colors-cyan-300)",
+    plain: "var(--chakra-colors-pink-100)",
   },
 };
 
@@ -47,13 +48,17 @@ const Project: FC<ProjectProps> = ({ children }) => {
 
   return (
     <SandpackProvider customSetup={{ files: files.base }} template="react">
-      <ScrollContainer h="calc(100vh - 64px)" w="53vw">
+      <ScrollContainer h="calc(100vh - 64px)" w="50vw" fontFamily="poppins">
         {children}
       </ScrollContainer>
-      <Box pos="fixed" top="64px" right={0} bottom={0} w="47%">
+      <Box pos="fixed" top="64px" right={0} bottom={0} w="50%">
         <SandpackLayout
           theme={theme}
-          style={{ borderTop: "none", borderRadius: 0 }}
+          style={{
+            borderTop: "none",
+            borderRadius: 0,
+            backgroundColor: "#1f1d1f",
+          }}
         >
           <Stack spacing={0} h="calc(100vh - 64px)" w="100%">
             {/* <Navigator /> */}
@@ -64,7 +69,11 @@ const Project: FC<ProjectProps> = ({ children }) => {
                 fontFamily: "poppins",
               }}
             />
-            <SandpackPreview customStyle={{ height: "50%" }} />
+            <SandpackPreview
+              customStyle={{
+                height: "50%",
+              }}
+            />
           </Stack>
         </SandpackLayout>
       </Box>
