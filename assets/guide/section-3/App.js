@@ -2,14 +2,14 @@ import { Scroll } from "./scrollex";
 import "./styles.css";
 
 const keyframes = {
-  heading: {
-    0: {
+  heading: ({ section }) => ({
+    [section.topAt("container-top")]: {
       rotateZ: "0deg",
     },
-    200: {
+    [section.bottomAt("container-top")]: {
       rotateZ: "180deg",
     },
-  },
+  }),
 };
 
 export default function App() {
