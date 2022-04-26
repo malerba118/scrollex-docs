@@ -5,7 +5,10 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { useSandpack } from "@codesandbox/sandpack-react";
+import {
+  useSandpack,
+  useSandpackNavigation,
+} from "@codesandbox/sandpack-react";
 import { nanoid } from "nanoid";
 import { Box } from "@chakra-ui/react";
 import { motion } from "framer-motion";
@@ -22,6 +25,7 @@ const CodeSectionContext = createContext<CodeSectionApi | null>(null);
 interface CodeSectionProps {
   files: any;
   disablePadding?: boolean;
+  refresh?: boolean;
 }
 
 export const CodeSectionProvider: FC<any> = ({ children }) => {
@@ -41,9 +45,12 @@ const timeout = async (ms: number) =>
 const CodeSection: FC<CodeSectionProps> = ({
   files = {},
   disablePadding,
+  refresh = false,
   ...otherProps
 }) => {
   const { sandpack } = useSandpack();
+  const nav = useSandpackNavigation();
+
   const [id] = useState(() => nanoid());
   const section = useContext(CodeSectionContext);
 
@@ -56,9 +63,15 @@ const CodeSection: FC<CodeSectionProps> = ({
 
   useEffect(() => {
     if (section?.selected === id) {
-      updateFiles(files);
+      updateFiles(files).then(() => {
+        if (refresh) {
+          setTimeout(() => {
+            nav.refresh();
+          }, 1000);
+        }
+      });
     }
-  }, [section?.selected, JSON.stringify(files)]);
+  }, [section?.selected, JSON.stringify(files), refresh]);
 
   return (
     <MotionBox

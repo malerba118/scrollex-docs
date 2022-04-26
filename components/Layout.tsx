@@ -11,22 +11,31 @@ const Layout: FC<LayoutProps> = ({ children }) => {
       <HStack
         h="64px"
         borderBottom="1px solid rgba(255,255,255, .1)"
-        px={6}
-        spacing={12}
+        px={{ base: 4, md: 6 }}
+        spacing={{ base: 6, md: 12 }}
         display="flex"
         alignItems="center"
       >
-        <Heading color="white" fontSize="2xl" fontFamily="limelight">
+        <Heading
+          color="white"
+          fontSize={{ base: "lg", md: "2xl" }}
+          fontFamily="limelight"
+        >
           Scrollex
         </Heading>
-        <HStack pt={1} spacing={6} fontWeight="bold">
-          <Link as={NextLink} href="/" fontSize="md" color="white">
+        <HStack
+          pt={1}
+          spacing={6}
+          fontWeight="bold"
+          fontSize={{ base: "sm", md: "md" }}
+        >
+          <Link as={NextLink} href="/" color="white">
             Guide
           </Link>
-          <Link as={NextLink} href="/components" fontSize="md" color="white">
+          <Link as={NextLink} href="/components" color="white">
             Components
           </Link>
-          <Link as={NextLink} href="/examples" fontSize="md" color="white">
+          <Link as={NextLink} href="/examples" color="white">
             Examples
           </Link>
         </HStack>
@@ -35,7 +44,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
           color="white"
           isExternal
           href="https://github.com/malerba118/scrollex"
-          display="inline-grid"
+          display={{ base: "none", md: "inline-grid" }}
           placeItems="center"
         >
           <Icon as={RiGithubFill} fontSize="3xl" />

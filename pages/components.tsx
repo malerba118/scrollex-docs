@@ -33,6 +33,9 @@ const mdxComponents = {
       />
     );
   },
+  a: (props: any) => (
+    <Link size="md" textDecoration="underline" isExternal {...props} />
+  ),
 };
 
 const Home: NextPage = () => {

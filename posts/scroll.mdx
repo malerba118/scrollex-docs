@@ -10,7 +10,7 @@ import * as files from "../components/files";
 
 # Guide
 
-Scrollex let's you create beautiful scroll experiences with minimal code.
+Scrollex let's you create beautiful scroll experiences using minimal code.
 
 </CodeSection>
 <CodeSection files={files.base}>
@@ -21,9 +21,9 @@ First you'll want to install `scrollex` along with `framer-motion`.
 npm install --save scrollex framer-motion
 ```
 
-In our app we'll need to add a `Scroll.Container` which will hold all of our scrollable content.
+In our app we'll need to add a `Scroll.Container` to hold all of our scrollable content.
 
-In many cases we'll want the container to take up the full size of the viewport however it can be any size.
+In many cases we'll want the container to take up the full size of the viewport, however it can be any size.
 
 ```jsx
 <Scroll.Container scrollAxis="y" className="h-screen">
@@ -38,13 +38,13 @@ Next we'll partition our content in to different sections.
 
 ```jsx
 <Scroll.Container scrollAxis="y" className="h-screen">
-  <Scroll.Section className="h-full children-center">
+  <Scroll.Section className="h-full center bg-1">
     <h1>Page One</h1>
   </Scroll.Section>
-  <Scroll.Section className="h-full children-center">
+  <Scroll.Section className="h-full center bg-2">
     <h1>Page Two</h1>
   </Scroll.Section>
-  <Scroll.Section className="h-full children-center">
+  <Scroll.Section className="h-full center bg-1">
     <h1>Page Three</h1>
   </Scroll.Section>
 </Scroll.Container>
@@ -61,16 +61,18 @@ So let's go ahead and add some motion to the example.
 </CodeSection>
 <CodeSection files={files.sectionTwo}>
 
+What we'd like to do is produce an effect where the headings slide in and then slide out as we scroll by.
+
 To do this we'll use the `Scroll.Item` component and pass it some keyframes.
 
 ```jsx
 const keyframes = {
   heading: {
     0: {
-      rotateZ: "0deg",
+      translateX: -200,
     },
     200: {
-      rotateZ: "180deg",
+      translateX: 200,
     },
   },
 };
@@ -78,17 +80,17 @@ const keyframes = {
 export default function App() {
   return (
     <Scroll.Container scrollAxis="y" className="h-screen">
-      <Scroll.Section className="h-full children-center">
+      <Scroll.Section className="h-full center bg-1">
         <Scroll.Item keyframes={keyframes.heading}>
           <h1>Page One</h1>
         </Scroll.Item>
       </Scroll.Section>
-      <Scroll.Section className="h-full children-center">
+      <Scroll.Section className="h-full center bg-2">
         <Scroll.Item keyframes={keyframes.heading}>
           <h1>Page Two</h1>
         </Scroll.Item>
       </Scroll.Section>
-      <Scroll.Section className="h-full children-center">
+      <Scroll.Section className="h-full center bg-1">
         <Scroll.Item keyframes={keyframes.heading}>
           <h1>Page Three</h1>
         </Scroll.Item>
@@ -100,28 +102,32 @@ export default function App() {
 
 These keyframes define how an element should look as the user scrolls through the content.
 
-The code above dictates that when the user has scrolled down an amount of 200 pixels, then any heading should have a rotation of 180 degrees.
+The code above dictates that before the user has scrolled at all, headings should have a translation of -200px in the x direction.
 
-However it also dictates that before the user has scrolled at all, headings should have no rotation applied.
+However it also dictates that after the user has scrolled down an amount of 200 pixels, then each heading should have a translation of +200 pixels in the x direction.
 
-So then you might be wondering what will the rotation be when the user has scrolled down 100 pixels from the top.
+So then you might be wondering what will the translation be when the user has scrolled down 100 pixels from the top?
 
-Well it turns out it will be 90 degrees because scrollex uses linear interpolation to transition between keyframes.
+Well it turns out it will be 0 pixels because scrollex uses linear interpolation to transition between keyframes.
+
+The effect we have right now is not particulary pleasant because each heading is already done animating after we've scrolled 200px.
+
+What we'd rather do is have each heading wait to begin animating until it becomes visible on the screen.
 
 </CodeSection>
 
 <CodeSection files={files.sectionThree}>
 
-Hardcoding in pixel offsets is not particularly wise or advisable, and for that reason scrollex provides some keyframe helpers.
+Thankfully scrollex provides some keyframe helpers that allow us identify important keyframes as we're scrolling.
 
 ```jsx
 const keyframes = {
   heading: ({ section }) => ({
-    [section.topAt("container-top")]: {
-      rotateZ: "0deg",
+    [section.topAt("container-bottom")]: {
+      translateX: -200,
     },
     [section.bottomAt("container-top")]: {
-      rotateZ: "180deg",
+      translateX: 200,
     },
   }),
 };
@@ -129,17 +135,17 @@ const keyframes = {
 export default function App() {
   return (
     <Scroll.Container scrollAxis="y" className="h-screen">
-      <Scroll.Section className="h-full children-center">
+      <Scroll.Section className="h-full center bg-1">
         <Scroll.Item keyframes={keyframes.heading}>
           <h1>Page One</h1>
         </Scroll.Item>
       </Scroll.Section>
-      <Scroll.Section className="h-full children-center">
+      <Scroll.Section className="h-full center bg-2">
         <Scroll.Item keyframes={keyframes.heading}>
           <h1>Page Two</h1>
         </Scroll.Item>
       </Scroll.Section>
-      <Scroll.Section className="h-full children-center">
+      <Scroll.Section className="h-full center bg-1">
         <Scroll.Item keyframes={keyframes.heading}>
           <h1>Page Three</h1>
         </Scroll.Item>
@@ -149,9 +155,9 @@ export default function App() {
 }
 ```
 
-Now each heading will rotate only when we scroll down to its containing section.
+Now each heading will begin animating only after we scroll down to its containing section.
 
-Here `section.topAt("container-top")` will return the number of pixels the user has to scroll for the top edge of the section to intersect the top edge of the container.
+Here `section.topAt("container-bottom")` will return the number of pixels the user has to scroll for the top edge of the section to intersect the bottom edge of the container.
 
 Likewise `section.bottomAt("container-top")` will return the number of pixels the user has to scroll for the bottom edge of the section to intersect the top edge of the container.
 
@@ -160,6 +166,91 @@ But how do we know which section we're dealing with?
 Well `Scroll.Item` can only be used within `Scroll.Section`, so the keyframes function passed to a `Scroll.Item` will always reference the item's containing section.
 
 The cool thing about this is that scrollex is tracking the section bounds internally and if the section's size/position happen to change, scrollex will automatically recalculate our keyframes.
+
+At the moment our headings move at a constant speed across the screen while we scroll, but what if we wanted them to move in quickly, then stick in the center for a bit, and then move out quickly?
+
+</CodeSection>
+
+<CodeSection files={files.sectionFour}>
+
+We can do this by adding two more keyframes in between our existing keyframes.
+
+```jsx
+const keyframes = {
+  heading: ({ section }) => ({
+    [section.topAt("container-bottom")]: {
+      translateX: -200,
+    },
+    [section.topAt("container-top") - 100]: {
+      translateX: 0,
+    },
+    [section.topAt("container-top") + 100]: {
+      translateX: 0,
+    },
+    [section.bottomAt("container-top")]: {
+      translateX: 200,
+    },
+  }),
+};
+
+export default function App() {
+  return (
+    <Scroll.Container scrollAxis="y" className="h-screen">
+      <Scroll.Section className="h-full center bg-1">
+        <Scroll.Item keyframes={keyframes.heading}>
+          <h1>Page One</h1>
+        </Scroll.Item>
+      </Scroll.Section>
+      <Scroll.Section className="h-full center bg-2">
+        <Scroll.Item keyframes={keyframes.heading}>
+          <h1>Page Two</h1>
+        </Scroll.Item>
+      </Scroll.Section>
+      <Scroll.Section className="h-full center bg-1">
+        <Scroll.Item keyframes={keyframes.heading}>
+          <h1>Page Three</h1>
+        </Scroll.Item>
+      </Scroll.Section>
+    </Scroll.Container>
+  );
+}
+```
+
+In the code above, the first and last keyframe are identical to those in the previous step, however now we've added two keyframes in between which guarantee that the heading will remain still for a range of 200 pixels as we scroll by.
+
+```jsx
+const keyframes = {
+  heading: ({ section }) => ({
+    /* ... */
+    [section.topAt("container-top") - 100]: {
+      translateX: 0,
+    },
+    [section.topAt("container-top") + 100]: {
+      translateX: 0,
+    },
+    /* ... */
+  }),
+};
+```
+
+Because `section.topAt("container-top")` returns a scroll offset value in pixels, we can add or subtract pixels from it to fine-tune our experience.
+
+Not only can we add/subtract constants like `100`, but we could do arithmetic like the following to create a more responsive experience.
+
+```jsx
+const keyframes = {
+  heading: ({ section, container }) => ({
+    /* ... */
+    [section.topAt("container-top") - container.height / 4]: {
+      translateX: 0,
+    },
+    [section.topAt("container-top") + container.height / 4]: {
+      translateX: 0,
+    },
+    /* ... */
+  }),
+};
+```
 
 </CodeSection>
 </CodeSectionProvider>

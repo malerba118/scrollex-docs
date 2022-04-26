@@ -131,40 +131,40 @@ const theme = extendTheme({
     },
     Text: {
       baseStyle: {
-        color: "whiteAlpha.700",
+        color: "rgba(255, 255, 255, 0.72)",
         fontSize: "sm",
       },
       sizes: {
         xs: {
           lineHeight: "180%",
-          color: "whiteAlpha.700",
+          color: "rgba(255, 255, 255, 0.72)",
           fontSize: "xs",
         },
         sm: {
           lineHeight: "180%",
-          color: "whiteAlpha.700",
+          color: "rgba(255, 255, 255, 0.72)",
           fontSize: "sm",
         },
         md: {
           lineHeight: "180%",
-          color: "whiteAlpha.700",
+          color: "rgba(255, 255, 255, 0.72)",
           fontSize: "md",
         },
         lg: {
           lineHeight: "180%",
-          color: "whiteAlpha.700",
+          color: "rgba(255, 255, 255, 0.72)",
           fontSize: "lg",
         },
         xl: {
           lineHeight: "180%",
-          color: "whiteAlpha.700",
+          color: "rgba(255, 255, 255, 0.72)",
           fontSize: "xl",
         },
       },
     },
     Link: {
       baseStyle: {
-        color: "whiteAlpha.700",
+        color: "rgba(255, 255, 255, 0.72)",
         fontSize: "sm",
       },
       sizes: {

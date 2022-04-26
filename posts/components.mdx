@@ -2,7 +2,7 @@ import { Wrap, Box } from "@chakra-ui/react";
 import InlineCode from "../components/InlineCode";
 import CodeBlock from "../components/CodeBlock";
 
-## Scroll.Container
+# Scroll.Container
 
 A scrollable container intended to wrap your scrollable content.
 
@@ -41,7 +41,7 @@ interface ScrollContainerProps extends HTMLProps<HTMLDivElement> {
 }
 ```
 
-##### scrollAxis
+#### scrollAxis
 
 Specifies the scroll direction of the container.
 
@@ -53,7 +53,7 @@ Specifies the scroll direction of the container.
 </Scroll.Container>
 ```
 
-##### throttleAmount
+#### throttleAmount
 
 Throttle duration in milliseconds used to throttle mouse events and prevent animation interruptions.
 You may wish to set this to `0` if animations are too sluggish/choppy for your liking. Default value is `90`.
@@ -66,9 +66,9 @@ You may wish to set this to `0` if animations are too sluggish/choppy for your l
 </Scroll.Container>
 ```
 
-## Scroll.Section
+# Scroll.Section
 
-A section used to partition scrollable content and track important keyframes.
+Used to partition scrollable content and track important keyframes.
 
 ### Usage
 
@@ -102,7 +102,7 @@ interface ScrollSectionProps extends HTMLMotionProps<"div"> {
 }
 ```
 
-##### showOverflow
+#### showOverflow
 
 If `true`, allows section contents to overflow its bounds. If `false`, content that overflows the section bounds will be hidden. Default value is `false`.
 
@@ -116,9 +116,9 @@ If `true`, allows section contents to overflow its bounds. If `false`, content t
 </Scroll.Container>
 ```
 
-## Scroll.Item
+# Scroll.Item
 
-An animatable container used to animate content according to the current scroll position.
+A container used to animate its content according to the current scroll position.
 
 ### Usage
 
@@ -137,17 +137,17 @@ const keyframes = {
 export default function App() {
   return (
     <Scroll.Container scrollAxis="y" className="h-screen">
-      <Scroll.Section className="h-full children-center">
+      <Scroll.Section className="h-full center">
         <Scroll.Item keyframes={keyframes.heading}>
           <h1>Page One</h1>
         </Scroll.Item>
       </Scroll.Section>
-      <Scroll.Section className="h-full children-center">
+      <Scroll.Section className="h-full center">
         <Scroll.Item keyframes={keyframes.heading}>
           <h1>Page Two</h1>
         </Scroll.Item>
       </Scroll.Section>
-      <Scroll.Section className="h-full children-center">
+      <Scroll.Section className="h-full center">
         <Scroll.Item keyframes={keyframes.heading}>
           <h1>Page Three</h1>
         </Scroll.Item>
@@ -169,12 +169,12 @@ interface ScrollItemProps extends HTMLMotionProps<"div"> {
 }
 ```
 
-##### keyframes
+#### keyframes
 
 Can be either a function that returns a keyframes object or a keyframes object itself.
 
-A keyframes object has the following form, where a key represents a scroll offset as a number of pixels
-and a value represent the transformations that should be applied to the item when the user has scrolled the specified number of pixels.
+A keyframes object has the following form, where each key represents a scroll offset as a number of pixels
+and each value represents the transformations that should be applied to the item when the user has scrolled the specified number of pixels.
 
 ```tsx
 type KeyframesObj = Record<
@@ -197,8 +197,9 @@ type KeyframesObj = Record<
 >;
 ```
 
-For example the following keyframes dictate that once the user has scrolled down 200 pixels from the top of the container
-then each heading should have a rotation of `180deg` applied.
+One thing to note is that scrollex only permits us to set `transform` and `opacity` properties because they're widely known to be the [safest properties to animate](https://web.dev/animations-guide/).
+
+To better understand how keyframes work, consider the following example.
 
 ```jsx
 const keyframes = {
@@ -215,17 +216,17 @@ const keyframes = {
 export default function App() {
   return (
     <Scroll.Container scrollAxis="y" className="h-screen">
-      <Scroll.Section className="h-full children-center">
+      <Scroll.Section className="h-full center">
         <Scroll.Item keyframes={keyframes.heading}>
           <h1>Page One</h1>
         </Scroll.Item>
       </Scroll.Section>
-      <Scroll.Section className="h-full children-center">
+      <Scroll.Section className="h-full center">
         <Scroll.Item keyframes={keyframes.heading}>
           <h1>Page Two</h1>
         </Scroll.Item>
       </Scroll.Section>
-      <Scroll.Section className="h-full children-center">
+      <Scroll.Section className="h-full center">
         <Scroll.Item keyframes={keyframes.heading}>
           <h1>Page Three</h1>
         </Scroll.Item>
@@ -234,6 +235,9 @@ export default function App() {
   );
 }
 ```
+
+The keyframes above dictate that once the user has scrolled down 200 pixels from the top of the container
+then each heading should have a rotation of `180deg` applied.
 
 If instead we pass a function to the `keyframes` prop (which we typcially will), then we'll have access to layout helpers that can help us calculate important keyframes.
 
@@ -252,17 +256,17 @@ const keyframes = {
 export default function App() {
   return (
     <Scroll.Container scrollAxis="y" className="h-screen">
-      <Scroll.Section className="h-full children-center">
+      <Scroll.Section className="h-full center">
         <Scroll.Item keyframes={keyframes.heading}>
           <h1>Page One</h1>
         </Scroll.Item>
       </Scroll.Section>
-      <Scroll.Section className="h-full children-center">
+      <Scroll.Section className="h-full center">
         <Scroll.Item keyframes={keyframes.heading}>
           <h1>Page Two</h1>
         </Scroll.Item>
       </Scroll.Section>
-      <Scroll.Section className="h-full children-center">
+      <Scroll.Section className="h-full center">
         <Scroll.Item keyframes={keyframes.heading}>
           <h1>Page Three</h1>
         </Scroll.Item>
@@ -275,15 +279,7 @@ export default function App() {
 When passing a function to the `keyframes` prop, the function will be invoked with the following helpers.
 
 ```tsx
-type ContainerPositionY =
-  | "container-top"
-  | "container-center"
-  | "container-bottom";
-
-type ContainerPositionX =
-  | "container-left"
-  | "container-center"
-  | "container-right";
+type KeyframesFn = (context: KeyframesContext) => KeyframesObj;
 
 type KeyframesContext = {
   section: {
@@ -302,5 +298,169 @@ type KeyframesContext = {
   data?: any;
 };
 
-type KeyframesFn = (context: KeyframesContext) => KeyframesObj;
+type ContainerPositionY =
+  | "container-top"
+  | "container-center"
+  | "container-bottom";
+
+type ContainerPositionX =
+  | "container-left"
+  | "container-center"
+  | "container-right";
 ```
+
+#### springs
+
+Internally each property (eg: `translateX`, `rotateZ`, `scale`) has an associated spring that controls its motion.
+
+The `springs` prop accepts a `SpringConfigs` object which allows us to control the characteristics of these springs.
+
+```jsx
+const springs = {
+  scale: {
+    mass: 0.01,
+    stiffness: 10,
+    damping: 100,
+  },
+};
+
+<Scroll.Item keyframes={keyframes.heading} springs={springs}>
+  <h1>Page One</h1>
+</Scroll.Item>;
+```
+
+`SpringConfigs` objects should have the following form.
+
+```tsx
+type SpringConfigs = {
+  scale?: SpringOptions;
+  scaleX?: SpringOptions;
+  scaleY?: SpringOptions;
+  scaleZ?: SpringOptions;
+  translateX?: SpringOptions;
+  translateY?: SpringOptions;
+  translateZ?: SpringOptions;
+  rotateX?: SpringOptions;
+  rotateY?: SpringOptions;
+  rotateZ?: SpringOptions;
+  skewX?: SpringOptions;
+  skewY?: SpringOptions;
+  opacity?: SpringOptions;
+};
+
+type SpringOptions = {
+  stiffness?: number;
+  damping?: number;
+  mass?: number;
+  restSpeed?: number;
+  restDelta?: number;
+};
+```
+
+The spring defaults are as follows.
+
+```tsx
+const DEFAULT_SPRING_CONFIGS = {
+  translateX: {
+    mass: 0.05,
+    damping: 7.5,
+    stiffness: 100,
+  },
+  translateY: {
+    mass: 0.05,
+    damping: 7.5,
+    stiffness: 100,
+  },
+  translateZ: {
+    mass: 0.05,
+    damping: 7.5,
+    stiffness: 100,
+  },
+  scale: {
+    mass: 0.05,
+    damping: 20,
+  },
+  scaleX: {
+    mass: 0.05,
+    damping: 20,
+  },
+  scaleY: {
+    mass: 0.05,
+    damping: 20,
+  },
+  scaleZ: {
+    mass: 0.05,
+    damping: 20,
+  },
+  skewX: {
+    mass: 0.1,
+    damping: 20,
+  },
+  skewY: {
+    mass: 0.1,
+    damping: 20,
+  },
+  rotateX: {
+    mass: 0.05,
+    damping: 7.5,
+    stiffness: 100,
+  },
+  rotateY: {
+    mass: 0.05,
+    damping: 7.5,
+    stiffness: 100,
+  },
+  rotateZ: {
+    mass: 0.05,
+    damping: 7.5,
+    stiffness: 100,
+  },
+  opacity: {
+    mass: 0.1,
+    damping: 20,
+  },
+};
+```
+
+#### data
+
+The `data` prop allows us to pass through custom variables to the keyframes function.
+
+One of the most practical uses of this is to pass array indexes as a variable to a keyframes function.
+
+```jsx
+const keyframes = {
+  heading: ({ section, data }) => ({
+    [section.topAt("container-top") + data.index * 200]: {
+      opacity: 0,
+    },
+    [section.topAt("container-top") + data.index * 200 + 10]: {
+      opacity: 1,
+    },
+  }),
+};
+
+const headings = ["Page One", "Page Two", "Page Three"];
+
+export default function App() {
+  return (
+    <Scroll.Container scrollAxis="y" className="h-screen">
+      <Scroll.Section className="h-[500vh]" showOverflow>
+        <div className="sticky top-0 h-screen center">
+          {headings.map((heading, index) => (
+            <Scroll.Item
+              key={heading}
+              keyframes={keyframes.heading}
+              data={{ index }}
+            >
+              <h1>{heading}</h1>
+            </Scroll.Item>
+          ))}
+        </div>
+      </Scroll.Section>
+    </Scroll.Container>
+  );
+}
+```
+
+Through this method we can create a staggered effect as we scroll, revealing array items one after another.

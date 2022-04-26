@@ -14,3 +14,7 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.sp-preview-iframe {
+  background-color: #1f1d1f !important;
+}

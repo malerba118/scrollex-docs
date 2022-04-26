@@ -6,6 +6,12 @@ const keyframes = {
     [section.topAt("container-bottom")]: {
       translateX: -200,
     },
+    [section.topAt("container-top") - 100]: {
+      translateX: 0,
+    },
+    [section.topAt("container-top") + 100]: {
+      translateX: 0,
+    },
     [section.bottomAt("container-top")]: {
       translateX: 200,
     },

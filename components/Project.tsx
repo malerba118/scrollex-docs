@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import {
   SandpackCodeEditor,
   SandpackLayout,
@@ -13,10 +13,11 @@ import {
   SandpackThemeProvider,
 } from "@codesandbox/sandpack-react";
 import "@codesandbox/sandpack-react/dist/index.css";
-import { Box, Stack } from "@chakra-ui/react";
+import { Box, Stack, IconButton, useBreakpoint } from "@chakra-ui/react";
 import * as files from "./files";
 import ScrollContainer from "./ScrollContainer";
 import useCustomTheme from "../hooks/useCustomTheme";
+import { RiCloseFill, RiCodeFill } from "react-icons/ri";
 
 interface ProjectProps {
   theme?: SandpackThemeProp;
@@ -25,7 +26,7 @@ interface ProjectProps {
 const themeOverrides: SandpackPartialTheme = {
   typography: {
     monoFont: "Ubuntu Mono",
-    bodyFont: "Poppins",
+    bodyFont: "Ubuntu Mono",
     fontSize: "1rem",
   },
   palette: {
@@ -45,14 +46,32 @@ const themeOverrides: SandpackPartialTheme = {
 };
 
 const InnerProject: FC = ({ children }) => {
-  const { theme } = useCustomTheme(themeOverrides);
+  const { theme } = useCustomTheme({
+    ...themeOverrides,
+  });
+  const breakpoint = useBreakpoint();
+  const [showCode, setShowCode] = useState(false);
+
+  const isSmallScreen = ["base", "xs", "sm"].includes(breakpoint!);
 
   return (
     <SandpackProvider customSetup={{ files: files.base }} template="react">
-      <ScrollContainer h="calc(100vh - 64px)" w="50vw" fontFamily="poppins">
+      <ScrollContainer
+        h="calc(100vh - 64px)"
+        w={{ base: "100vw", md: "50vw" }}
+        fontFamily="poppins"
+      >
         {children}
       </ScrollContainer>
-      <Box pos="fixed" top="64px" right={0} bottom={0} w="50%">
+      <Box
+        pos="fixed"
+        top="64px"
+        right={0}
+        bottom={0}
+        w={{ base: "100%", md: "50%" }}
+        display={isSmallScreen && !showCode ? "none" : "block"}
+        overscrollBehavior="contain"
+      >
         <SandpackLayout
           theme={theme}
           style={{
@@ -62,12 +81,10 @@ const InnerProject: FC = ({ children }) => {
           }}
         >
           <Stack spacing={0} h="calc(100vh - 64px)" w="100%">
-            {/* <Navigator /> */}
             <SandpackCodeEditor
               showLineNumbers
               customStyle={{
                 height: "50%",
-                fontFamily: "poppins",
               }}
             />
             <SandpackPreview
@@ -78,6 +95,34 @@ const InnerProject: FC = ({ children }) => {
           </Stack>
         </SandpackLayout>
       </Box>
+      {isSmallScreen && !showCode && (
+        <IconButton
+          pos="fixed"
+          bottom={4}
+          right={4}
+          zIndex={1}
+          colorScheme="gray"
+          color="white"
+          aria-label="Show Code"
+          icon={<RiCodeFill />}
+          onClick={() => setShowCode(true)}
+          size="md"
+        />
+      )}
+      {isSmallScreen && showCode && (
+        <IconButton
+          pos="fixed"
+          bottom={4}
+          right={4}
+          zIndex={1}
+          colorScheme="gray"
+          color="white"
+          aria-label="Show Code"
+          icon={<RiCloseFill />}
+          onClick={() => setShowCode(false)}
+          size="md"
+        />
+      )}
     </SandpackProvider>
   );
 };
