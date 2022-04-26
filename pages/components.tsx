@@ -4,8 +4,8 @@ import InlineCode from "../components/InlineCode";
 import Project from "../components/Project";
 import styles from "../styles/Home.module.css";
 // import TutorialMdx from "../posts/reorder-list.mdx";
-import TutorialMdx from "../posts/scroll.mdx";
-import SandpackCodeBlock from "../components/SandpackCodeBlock";
+import ComponentsMdx from "../posts/components.mdx";
+import CodeBlock from "../components/CodeBlock";
 import Layout from "../components/Layout";
 
 const mdxComponents = {
@@ -13,10 +13,11 @@ const mdxComponents = {
     <Heading fontWeight="800" mt={8} mb={4} size="2xl" {...props} />
   ),
   h2: (props: any) => (
-    <Heading fontWeight="700" mt={8} mb={4} size="lg" {...props} />
+    <Heading fontWeight="700" mt={8} mb={4} size="xl" {...props} />
   ),
-  h3: (props: any) => <Heading mt={8} mb={4} size="md" {...props} />,
-  h4: (props: any) => <Heading mt={8} mb={4} size="sm" {...props} />,
+  h3: (props: any) => <Heading mt={8} mb={4} size="lg" {...props} />,
+  h4: (props: any) => <Heading mt={8} mb={4} size="md" {...props} />,
+  h5: (props: any) => <Heading mt={8} mb={4} size="sm" {...props} />,
   p: (props: any) => <Text mt={4} mb={4} size="md" {...props} />,
   code: (props: any) => <InlineCode {...props} />,
   pre: (props: any) => {
@@ -24,7 +25,7 @@ const mdxComponents = {
     const code = props.children?.props?.children?.trim() || "";
     const language = className.replace(/language-/, "");
     return (
-      <SandpackCodeBlock
+      <CodeBlock
         code={code}
         language={language}
         path={props.path}
@@ -37,11 +38,9 @@ const mdxComponents = {
 const Home: NextPage = () => {
   return (
     <Layout>
-      <Project theme="sandpack-dark">
-        <Box>
-          <TutorialMdx components={mdxComponents} />
-        </Box>
-      </Project>
+      <Box maxW="3xl" m="0 auto" p={{ base: 6, md: 12 }}>
+        <ComponentsMdx components={mdxComponents} />
+      </Box>
     </Layout>
   );
 };

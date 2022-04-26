@@ -1,7 +1,7 @@
 import { Wrap, Box } from "@chakra-ui/react";
 import InlineCode from "../components/InlineCode";
 import FileAction from "../components/FileAction";
-import CodeBlock from "../components/CodeBlock";
+import SandpackCodeBlock from "../components/SandpackCodeBlock";
 import CodeSection, { CodeSectionProvider } from "../components/CodeSection";
 import * as files from "../components/files";
 
@@ -15,13 +15,14 @@ Scrollex let's you create beautiful scroll experiences with minimal code.
 </CodeSection>
 <CodeSection files={files.base}>
 
-First you'll want to install scrollex along with `framer-motion`.
+First you'll want to install `scrollex` along with `framer-motion`.
 
 ```html
 npm install --save scrollex framer-motion
 ```
 
-In our app we'll add a `Scroll.Container` which will hold all of our scrollable content.
+In our app we'll need to add a `Scroll.Container` which will hold all of our scrollable content.
+
 In many cases we'll want the container to take up the full size of the viewport however it can be any size.
 
 ```jsx

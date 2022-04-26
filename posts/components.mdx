@@ -1,0 +1,306 @@
+import { Wrap, Box } from "@chakra-ui/react";
+import InlineCode from "../components/InlineCode";
+import CodeBlock from "../components/CodeBlock";
+
+## Scroll.Container
+
+A scrollable container intended to wrap your scrollable content.
+
+Often you will want this container to occupy the full size of the viewport, though it can be any width/height.
+
+### Usage
+
+```jsx
+import { Scroll } from "scrollex";
+
+export default function App() {
+  return (
+    <Scroll.Container scrollAxis="y" className="h-screen">
+      <Scroll.Section>
+        <h1>Section One</h1>
+      </Scroll.Section>
+      <Scroll.Section>
+        <h1>Section Two</h1>
+      </Scroll.Section>
+      <Scroll.Section>
+        <h1>Section Three</h1>
+      </Scroll.Section>
+    </Scroll.Container>
+  );
+}
+```
+
+### Props
+
+Renders a div internally and accepts all props that a standard div would.
+
+```tsx
+interface ScrollContainerProps extends HTMLProps<HTMLDivElement> {
+  scrollAxis?: "x" | "y";
+  throttleAmount?: number;
+}
+```
+
+##### scrollAxis
+
+Specifies the scroll direction of the container.
+
+```jsx
+<Scroll.Container scrollAxis="x">
+  <Scroll.Section>
+    <h1>Section One</h1>
+  </Scroll.Section>
+</Scroll.Container>
+```
+
+##### throttleAmount
+
+Throttle duration in milliseconds used to throttle mouse events and prevent animation interruptions.
+You may wish to set this to `0` if animations are too sluggish/choppy for your liking. Default value is `90`.
+
+```jsx
+<Scroll.Container throttleAmount={0}>
+  <Scroll.Section>
+    <h1>Section One</h1>
+  </Scroll.Section>
+</Scroll.Container>
+```
+
+## Scroll.Section
+
+A section used to partition scrollable content and track important keyframes.
+
+### Usage
+
+```jsx
+import { Scroll } from "scrollex";
+
+export default function App() {
+  return (
+    <Scroll.Container scrollAxis="y" className="h-screen">
+      <Scroll.Section>
+        <h1>Section One</h1>
+      </Scroll.Section>
+      <Scroll.Section>
+        <h1>Section Two</h1>
+      </Scroll.Section>
+      <Scroll.Section>
+        <h1>Section Three</h1>
+      </Scroll.Section>
+    </Scroll.Container>
+  );
+}
+```
+
+### Props
+
+Renders a div internally and accepts all props that a standard div would.
+
+```tsx
+interface ScrollSectionProps extends HTMLMotionProps<"div"> {
+  showOverflow?: boolean;
+}
+```
+
+##### showOverflow
+
+If `true`, allows section contents to overflow its bounds. If `false`, content that overflows the section bounds will be hidden. Default value is `false`.
+
+**NOTE:** If you wish to use **sticky position** elements inside of a section, it's imperative to set this to `true`.
+
+```jsx
+<Scroll.Container scrollAxis="y">
+  <Scroll.Section showOverflow={true} className="h-[200vh]">
+    <h1 className="sticky top-0">I will stick</h1>
+  </Scroll.Section>
+</Scroll.Container>
+```
+
+## Scroll.Item
+
+An animatable container used to animate content according to the current scroll position.
+
+### Usage
+
+```jsx
+const keyframes = {
+  heading: ({ section }) => ({
+    [section.topAt("container-top")]: {
+      rotateZ: "0deg",
+    },
+    [section.bottomAt("container-top")]: {
+      rotateZ: "180deg",
+    },
+  }),
+};
+
+export default function App() {
+  return (
+    <Scroll.Container scrollAxis="y" className="h-screen">
+      <Scroll.Section className="h-full children-center">
+        <Scroll.Item keyframes={keyframes.heading}>
+          <h1>Page One</h1>
+        </Scroll.Item>
+      </Scroll.Section>
+      <Scroll.Section className="h-full children-center">
+        <Scroll.Item keyframes={keyframes.heading}>
+          <h1>Page Two</h1>
+        </Scroll.Item>
+      </Scroll.Section>
+      <Scroll.Section className="h-full children-center">
+        <Scroll.Item keyframes={keyframes.heading}>
+          <h1>Page Three</h1>
+        </Scroll.Item>
+      </Scroll.Section>
+    </Scroll.Container>
+  );
+}
+```
+
+### Props
+
+Renders a div internally and accepts all props that a standard div would.
+
+```tsx
+interface ScrollItemProps extends HTMLMotionProps<"div"> {
+  keyframes?: KeyframesFn | KeyframesObj;
+  springs?: SpringConfigs;
+  data?: any;
+}
+```
+
+##### keyframes
+
+Can be either a function that returns a keyframes object or a keyframes object itself.
+
+A keyframes object has the following form, where a key represents a scroll offset as a number of pixels
+and a value represent the transformations that should be applied to the item when the user has scrolled the specified number of pixels.
+
+```tsx
+type KeyframesObj = Record<
+  number,
+  {
+    scale?: number | string;
+    scaleX?: number | string;
+    scaleY?: number | string;
+    scaleZ?: number | string;
+    translateX?: number | string;
+    translateY?: number | string;
+    translateZ?: number | string;
+    rotateX?: number | string;
+    rotateY?: number | string;
+    rotateZ?: number | string;
+    skewX?: number | string;
+    skewY?: number | string;
+    opacity?: number | string;
+  }
+>;
+```
+
+For example the following keyframes dictate that once the user has scrolled down 200 pixels from the top of the container
+then each heading should have a rotation of `180deg` applied.
+
+```jsx
+const keyframes = {
+  heading: {
+    [0]: {
+      rotateZ: "0deg",
+    },
+    [200]: {
+      rotateZ: "180deg",
+    },
+  },
+};
+
+export default function App() {
+  return (
+    <Scroll.Container scrollAxis="y" className="h-screen">
+      <Scroll.Section className="h-full children-center">
+        <Scroll.Item keyframes={keyframes.heading}>
+          <h1>Page One</h1>
+        </Scroll.Item>
+      </Scroll.Section>
+      <Scroll.Section className="h-full children-center">
+        <Scroll.Item keyframes={keyframes.heading}>
+          <h1>Page Two</h1>
+        </Scroll.Item>
+      </Scroll.Section>
+      <Scroll.Section className="h-full children-center">
+        <Scroll.Item keyframes={keyframes.heading}>
+          <h1>Page Three</h1>
+        </Scroll.Item>
+      </Scroll.Section>
+    </Scroll.Container>
+  );
+}
+```
+
+If instead we pass a function to the `keyframes` prop (which we typcially will), then we'll have access to layout helpers that can help us calculate important keyframes.
+
+```jsx
+const keyframes = {
+  heading: ({ section }) => ({
+    [section.topAt("container-top")]: {
+      rotateZ: "0deg",
+    },
+    [section.bottomAt("container-top")]: {
+      rotateZ: "180deg",
+    },
+  }),
+};
+
+export default function App() {
+  return (
+    <Scroll.Container scrollAxis="y" className="h-screen">
+      <Scroll.Section className="h-full children-center">
+        <Scroll.Item keyframes={keyframes.heading}>
+          <h1>Page One</h1>
+        </Scroll.Item>
+      </Scroll.Section>
+      <Scroll.Section className="h-full children-center">
+        <Scroll.Item keyframes={keyframes.heading}>
+          <h1>Page Two</h1>
+        </Scroll.Item>
+      </Scroll.Section>
+      <Scroll.Section className="h-full children-center">
+        <Scroll.Item keyframes={keyframes.heading}>
+          <h1>Page Three</h1>
+        </Scroll.Item>
+      </Scroll.Section>
+    </Scroll.Container>
+  );
+}
+```
+
+When passing a function to the `keyframes` prop, the function will be invoked with the following helpers.
+
+```tsx
+type ContainerPositionY =
+  | "container-top"
+  | "container-center"
+  | "container-bottom";
+
+type ContainerPositionX =
+  | "container-left"
+  | "container-center"
+  | "container-right";
+
+type KeyframesContext = {
+  section: {
+    topAt: (position: ContainerPositionY) => number;
+    bottomAt: (position: ContainerPositionY) => number;
+    leftAt: (position: ContainerPositionX) => number;
+    rightAt: (position: ContainerPositionX) => number;
+    width: number;
+    height: number;
+  };
+  container: {
+    width: number;
+    height: number;
+  };
+  maxScrollPosition: number;
+  data?: any;
+};
+
+type KeyframesFn = (context: KeyframesContext) => KeyframesObj;
+```

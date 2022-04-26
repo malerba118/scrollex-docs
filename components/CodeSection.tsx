@@ -68,6 +68,7 @@ const CodeSection: FC<CodeSectionProps> = ({
       }}
       viewport={{ margin: "-50% 0% -50% 0%" }}
       bg={section?.selected === id ? "blackAlpha.400" : "none"}
+      // filter={section?.selected === id ? "brightness(120%)" : ""}
       px={disablePadding ? undefined : { base: 4, md: 16 }}
       py={disablePadding ? undefined : { base: 2, md: 6 }}
       _after={{

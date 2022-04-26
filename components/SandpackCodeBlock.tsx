@@ -15,9 +15,10 @@ import {
   getSyntaxHighlight,
 } from "./utils";
 import { Box } from "@chakra-ui/react";
+import { RiFileEditLine } from "react-icons/ri";
 import useCustomTheme from "../hooks/useCustomTheme";
 
-interface CodeBlockProps {
+interface SandpackCodeBlockProps {
   path: string;
   code: string;
   language: SandpackLanguageSupport;
@@ -44,13 +45,14 @@ const themeOverrides = {
   },
 };
 
-const CodeBlock: FC<CodeBlockProps> = ({
+const SandpackCodeBlock: FC<SandpackCodeBlockProps> = ({
   path,
   code,
   language = "typescript",
   showLineNumbers = false,
 }) => {
   const { theme } = useCustomTheme(themeOverrides);
+  const { sandpack } = useSandpack();
   const editor = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
@@ -97,14 +99,29 @@ const CodeBlock: FC<CodeBlockProps> = ({
               opacity: 1,
             }}
             rounded="lg"
+            onClick={() => {
+              sandpack.openFile(path);
+            }}
           >
             {formatFilePath(path)}
           </Tag>
+          <Button
+            colorScheme="whiteAlpha"
+            size="xs"
+            color="orange.200"
+            onClick={() => {
+              sandpack.openFile(path);
+              sandpack.updateFile(path, code || "");
+            }}
+          >
+            <Icon alignSelf="center" fontSize="md" as={RiFileEditLine} mr="1" />{" "}
+            Copy to Sandbox
+          </Button>
         </Flex>
       )}
       <Box
         py={4}
-        px={4}
+        px={1}
         bg={theme.palette.defaultBackground}
         rounded="lg"
         overflow="hidden"
@@ -115,12 +132,12 @@ const CodeBlock: FC<CodeBlockProps> = ({
   );
 };
 
-const CodeBlockWrapper: FC<CodeBlockProps> = (props) => {
+const SandpackCodeBlockWrapper: FC<SandpackCodeBlockProps> = (props) => {
   return (
     <SandpackThemeProvider theme="sandpack-dark">
-      <CodeBlock {...props} />
+      <SandpackCodeBlock {...props} />
     </SandpackThemeProvider>
   );
 };
 
-export default CodeBlockWrapper;
+export default SandpackCodeBlockWrapper;

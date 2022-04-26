@@ -90,7 +90,7 @@ const theme = extendTheme({
         },
         xl: {
           lineHeight: "140%",
-          letterSpacing: ".05em",
+          // letterSpacing: ".05em",
           fontSize: {
             base: "xl",
             md: "3xl",
@@ -99,7 +99,7 @@ const theme = extendTheme({
         },
         "2xl": {
           lineHeight: "110%",
-          letterSpacing: ".05em",
+          // letterSpacing: ".05em",
           fontSize: {
             base: "2xl",
             md: "4xl",
@@ -108,7 +108,7 @@ const theme = extendTheme({
         },
         "3xl": {
           lineHeight: "110%",
-          letterSpacing: ".05em",
+          // letterSpacing: ".05em",
           fontSize: {
             base: "3xl",
             md: "5xl",
@@ -117,7 +117,7 @@ const theme = extendTheme({
         },
         "4xl": {
           lineHeight: "110%",
-          letterSpacing: ".05em",
+          // letterSpacing: ".05em",
           fontSize: {
             base: "4xl",
             md: "6xl",

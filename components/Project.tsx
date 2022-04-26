@@ -10,6 +10,7 @@ import {
   getThemeStyleSheet,
   DeepPartial,
   SandpackPartialTheme,
+  SandpackThemeProvider,
 } from "@codesandbox/sandpack-react";
 import "@codesandbox/sandpack-react/dist/index.css";
 import { Box, Stack } from "@chakra-ui/react";
@@ -28,7 +29,7 @@ const themeOverrides: SandpackPartialTheme = {
     fontSize: "1rem",
   },
   palette: {
-    defaultBackground: "#232123",
+    defaultBackground: "#252325",
     activeText: "var(--chakra-colors-pink-300)",
     inactiveText: "var(--chakra-colors-whiteAlpha-200)",
     defaultText: "var(--chakra-colors-whiteAlpha-500)",
@@ -43,7 +44,7 @@ const themeOverrides: SandpackPartialTheme = {
   },
 };
 
-const Project: FC<ProjectProps> = ({ children }) => {
+const InnerProject: FC = ({ children }) => {
   const { theme } = useCustomTheme(themeOverrides);
 
   return (
@@ -78,6 +79,14 @@ const Project: FC<ProjectProps> = ({ children }) => {
         </SandpackLayout>
       </Box>
     </SandpackProvider>
+  );
+};
+
+const Project: FC<ProjectProps> = ({ theme, children }) => {
+  return (
+    <SandpackThemeProvider theme={theme}>
+      <InnerProject>{children}</InnerProject>
+    </SandpackThemeProvider>
   );
 };
 
