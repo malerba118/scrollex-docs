@@ -2,12 +2,18 @@ import { Scroll } from "scrollex";
 import "./styles.css";
 
 const keyframes = {
-  heading: ({ section }) => ({
+  heading: ({ section, container }) => ({
     [section.topAt("container-bottom")]: {
-      translateX: -200,
+      translateX: -container.width,
+    },
+    [section.topAt("container-top") - container.height / 4]: {
+      translateX: 0,
+    },
+    [section.topAt("container-top") + container.height / 4]: {
+      translateX: 0,
     },
     [section.bottomAt("container-top")]: {
-      translateX: 200,
+      translateX: container.width,
     },
   }),
 };

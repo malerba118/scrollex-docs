@@ -53,7 +53,7 @@ const InnerProject: FC = ({ children }) => {
   return (
     <SandpackProvider customSetup={{ files: files.base }} template="react">
       <ScrollContainer
-        h="calc(100vh - 64px)"
+        h="calc(var(--app-height) - 64px)"
         w={{ base: "100vw", md: "50vw" }}
         fontFamily="poppins"
       >
@@ -61,12 +61,13 @@ const InnerProject: FC = ({ children }) => {
       </ScrollContainer>
       <Box
         pos="fixed"
-        top="64px"
+        top={{ base: 0, md: "64px" }}
         right={0}
         bottom={0}
         w={{ base: "100%", md: "50%" }}
         display={isSmallScreen && !showCode ? "none" : "block"}
         overscrollBehavior="contain"
+        zIndex={1}
       >
         <SandpackLayout
           theme={theme}
@@ -76,7 +77,14 @@ const InnerProject: FC = ({ children }) => {
             backgroundColor: "#1f1d1f",
           }}
         >
-          <Stack spacing={0} h="calc(100vh - 64px)" w="100%">
+          <Stack
+            spacing={0}
+            h={{
+              base: "var(--app-height)",
+              md: "calc(var(--app-height) - 64px)",
+            }}
+            w="100%"
+          >
             <SandpackCodeEditor
               showLineNumbers
               customStyle={{
@@ -97,12 +105,16 @@ const InnerProject: FC = ({ children }) => {
           bottom={4}
           right={4}
           zIndex={1}
-          colorScheme="gray"
-          color="white"
+          colorScheme="pink"
           aria-label="Show Code"
           icon={<RiCodeFill />}
           onClick={() => setShowCode(true)}
           size="md"
+          color="pink.50"
+          bg="pink.300"
+          _hover={{
+            bg: "pink.400",
+          }}
         />
       )}
       {isSmallScreen && showCode && (
@@ -111,12 +123,16 @@ const InnerProject: FC = ({ children }) => {
           bottom={4}
           right={4}
           zIndex={1}
-          colorScheme="gray"
-          color="white"
-          aria-label="Show Code"
+          aria-label="Hide Code"
           icon={<RiCloseFill />}
           onClick={() => setShowCode(false)}
           size="md"
+          colorScheme="pink"
+          color="pink.50"
+          bg="pink.300"
+          _hover={{
+            bg: "pink.400",
+          }}
         />
       )}
     </SandpackProvider>

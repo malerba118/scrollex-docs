@@ -1,4 +1,4 @@
-import { Scroll } from "./scrollex";
+import { Scroll } from "scrollex";
 import "./styles.css";
 
 const keyframes = {

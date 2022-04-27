@@ -1,5 +1,5 @@
 // @ts-ignore
-import App from "!!raw-loader!../../assets/guide/section-1/App.js";
+import App from "!!raw-loader!../../assets/guide/section-6/App.js";
 // @ts-ignore
 import packageJson from "!!raw-loader!../../assets/guide/base/package.json.txt";
 // @ts-ignore

@@ -32,7 +32,7 @@ In many cases we'll want the container to take up the full size of the viewport,
 ```
 
 </CodeSection>
-<CodeSection files={files.sectionOne}>
+<CodeSection files={{ '/App.js': files.sectionOne['/App.js'] }}>
 
 Next we'll partition our content in to different sections.
 
@@ -59,7 +59,7 @@ At this point, you'll notice we just have a static page with no motion. In gener
 So let's go ahead and add some motion to the example.
 
 </CodeSection>
-<CodeSection files={files.sectionTwo}>
+<CodeSection files={{ '/App.js': files.sectionTwo['/App.js'] }}>
 
 What we'd like to do is produce an effect where the headings slide in and then slide out as we scroll by.
 
@@ -116,7 +116,7 @@ What we'd rather do is have each heading wait to begin animating until it become
 
 </CodeSection>
 
-<CodeSection files={files.sectionThree}>
+<CodeSection files={{ '/App.js': files.sectionThree['/App.js'] }}>
 
 Thankfully scrollex provides some keyframe helpers that allow us identify important keyframes as we're scrolling.
 
@@ -131,28 +131,6 @@ const keyframes = {
     },
   }),
 };
-
-export default function App() {
-  return (
-    <Scroll.Container scrollAxis="y" className="h-screen">
-      <Scroll.Section className="h-full center bg-1">
-        <Scroll.Item keyframes={keyframes.heading}>
-          <h1>Page One</h1>
-        </Scroll.Item>
-      </Scroll.Section>
-      <Scroll.Section className="h-full center bg-2">
-        <Scroll.Item keyframes={keyframes.heading}>
-          <h1>Page Two</h1>
-        </Scroll.Item>
-      </Scroll.Section>
-      <Scroll.Section className="h-full center bg-1">
-        <Scroll.Item keyframes={keyframes.heading}>
-          <h1>Page Three</h1>
-        </Scroll.Item>
-      </Scroll.Section>
-    </Scroll.Container>
-  );
-}
 ```
 
 Now each heading will begin animating only after we scroll down to its containing section.
@@ -171,7 +149,7 @@ At the moment our headings move at a constant speed across the screen while we s
 
 </CodeSection>
 
-<CodeSection files={files.sectionFour}>
+<CodeSection files={{ '/App.js': files.sectionFour['/App.js'] }}>
 
 We can do this by adding two more keyframes in between our existing keyframes.
 
@@ -192,65 +170,67 @@ const keyframes = {
     },
   }),
 };
-
-export default function App() {
-  return (
-    <Scroll.Container scrollAxis="y" className="h-screen">
-      <Scroll.Section className="h-full center bg-1">
-        <Scroll.Item keyframes={keyframes.heading}>
-          <h1>Page One</h1>
-        </Scroll.Item>
-      </Scroll.Section>
-      <Scroll.Section className="h-full center bg-2">
-        <Scroll.Item keyframes={keyframes.heading}>
-          <h1>Page Two</h1>
-        </Scroll.Item>
-      </Scroll.Section>
-      <Scroll.Section className="h-full center bg-1">
-        <Scroll.Item keyframes={keyframes.heading}>
-          <h1>Page Three</h1>
-        </Scroll.Item>
-      </Scroll.Section>
-    </Scroll.Container>
-  );
-}
 ```
 
-In the code above, the first and last keyframe are identical to those in the previous step, however now we've added two keyframes in between which guarantee that the heading will remain still for a range of 200 pixels as we scroll by.
+In the code above, the first and last keyframe are identical to those in the previous step, however now we've added two keyframes in between which guarantee that the heading will remain centered for a range of 200 pixels as we scroll by.
 
-```jsx
-const keyframes = {
-  heading: ({ section }) => ({
-    /* ... */
-    [section.topAt("container-top") - 100]: {
-      translateX: 0,
-    },
-    [section.topAt("container-top") + 100]: {
-      translateX: 0,
-    },
-    /* ... */
-  }),
-};
-```
+Because `section.topAt("container-top")` returns a scroll offset value in pixels, we can easily add or subtract pixels from it to fine-tune our experience.
 
-Because `section.topAt("container-top")` returns a scroll offset value in pixels, we can add or subtract pixels from it to fine-tune our experience.
+</CodeSection>
+<CodeSection files={{ '/App.js': files.sectionFive['/App.js'] }}>
 
-Not only can we add/subtract constants like `100`, but we could do arithmetic like the following to create a more responsive experience.
+Not only can we add/subtract values like 100, but we can do arithmetic like the following to create a more responsive experience.
 
 ```jsx
 const keyframes = {
   heading: ({ section, container }) => ({
-    /* ... */
+    [section.topAt("container-bottom")]: {
+      translateX: -200,
+    },
     [section.topAt("container-top") - container.height / 4]: {
       translateX: 0,
     },
     [section.topAt("container-top") + container.height / 4]: {
       translateX: 0,
     },
-    /* ... */
+    [section.bottomAt("container-top")]: {
+      translateX: 200,
+    },
   }),
 };
 ```
+
+</CodeSection>
+<CodeSection files={{ '/App.js': files.sectionSix['/App.js'] }}>
+
+But why stop there?
+
+We can actually use container/section dimensions within our transforms.
+
+```jsx
+const keyframes = {
+  heading: ({ section, container }) => ({
+    [section.topAt("container-bottom")]: {
+      translateX: -container.width,
+    },
+    [section.topAt("container-top") - container.height / 4]: {
+      translateX: 0,
+    },
+    [section.topAt("container-top") + container.height / 4]: {
+      translateX: 0,
+    },
+    [section.bottomAt("container-top")]: {
+      translateX: container.width,
+    },
+  }),
+};
+```
+
+With this we're guaranteed that no matter the screen size, our headings will always begin offscreen to the left and finish offscreen to the right.
+
+#### Wrapping Up
+
+We hope this guide has been helpful and we encourage you to check out the [components reference](/components) and the [examples](/examples) to see more of what's possible with scrollex!
 
 </CodeSection>
 </CodeSectionProvider>
