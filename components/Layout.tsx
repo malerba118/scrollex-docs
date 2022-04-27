@@ -16,13 +16,16 @@ const Layout: FC<LayoutProps> = ({ children }) => {
         display="flex"
         alignItems="center"
       >
-        <Heading
-          color="white"
-          fontSize={{ base: "lg", md: "2xl" }}
-          fontFamily="limelight"
-        >
-          Scrollex
-        </Heading>
+        <Link as={NextLink} href="/" color="white">
+          <Heading
+            color="white"
+            fontSize={{ base: "lg", md: "2xl" }}
+            fontFamily="limelight"
+            cursor="pointer"
+          >
+            Scrollex
+          </Heading>
+        </Link>
         <HStack
           pt={1}
           spacing={6}

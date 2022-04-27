@@ -4,11 +4,7 @@ import {
   SandpackLayout,
   SandpackPreview,
   SandpackProvider,
-  Navigator,
   SandpackThemeProp,
-  useSandpackTheme,
-  getThemeStyleSheet,
-  DeepPartial,
   SandpackPartialTheme,
   SandpackThemeProvider,
 } from "@codesandbox/sandpack-react";
