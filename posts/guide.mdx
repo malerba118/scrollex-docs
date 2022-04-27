@@ -12,16 +12,18 @@ import * as files from "../components/files";
 
 Scrollex let's you create beautiful scroll experiences using minimal code.
 
-</CodeSection>
-<CodeSection files={files.base}>
-
-First you'll want to install `scrollex` along with `framer-motion`.
+If you want to install scrollex in your own react project, you can do so with npm or yarn.
 
 ```html
 npm install --save scrollex framer-motion
 ```
 
-In our app we'll need to add a `Scroll.Container` to hold all of our scrollable content.
+However for this guide, scrollex is pre-installed in the sandbox to the right and all you have to do is read, scroll, and observe.
+
+</CodeSection>
+<CodeSection files={files.base}>
+
+To get started with scrollex, we need to add a `Scroll.Container` to hold all of our scrollable content.
 
 In many cases we'll want the container to take up the full size of the viewport, however it can be any size.
 
@@ -102,9 +104,9 @@ export default function App() {
 
 These keyframes define how an element should look as the user scrolls through the content.
 
-The code above dictates that before the user has scrolled at all, headings should have a translation of -200px in the x direction.
+The code above dictates that before the user has scrolled at all, headings should have a translation of -200px along the x axis.
 
-However it also dictates that after the user has scrolled down an amount of 200 pixels, then each heading should have a translation of +200 pixels in the x direction.
+However it also dictates that after the user has scrolled down an amount of 200 pixels, then each heading should have a translation of +200 pixels along the x axis.
 
 So then you might be wondering what will the translation be when the user has scrolled down 100 pixels from the top?
 
