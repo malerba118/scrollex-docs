@@ -32,10 +32,10 @@ export default function App() {
 
 ### Props
 
-Renders a div internally and accepts all props that a standard div would.
+Renders a div internally and accepts all props that a standard [motion.div](https://www.framer.com/docs/component/) would.
 
 ```tsx
-interface ScrollContainerProps extends HTMLProps<HTMLDivElement> {
+interface ScrollContainerProps extends HTMLMotionProps<"div"> {
   scrollAxis?: "x" | "y";
   throttleAmount?: number;
 }
@@ -55,7 +55,7 @@ Specifies the scroll direction of the container.
 
 #### throttleAmount
 
-Throttle duration in milliseconds used to throttle mouse events and prevent animation interruptions.
+Throttle duration in milliseconds used to throttle scroll events and prevent animation interruptions.
 You may wish to set this to `0` if animations are too sluggish/choppy for your liking. Default value is `90`.
 
 ```jsx
@@ -94,7 +94,7 @@ export default function App() {
 
 ### Props
 
-Renders a div internally and accepts all props that a standard div would.
+Renders a div internally and accepts all props that a standard [motion.div](https://www.framer.com/docs/component/) would.
 
 ```tsx
 interface ScrollSectionProps extends HTMLMotionProps<"div"> {
@@ -159,7 +159,7 @@ export default function App() {
 
 ### Props
 
-Renders a div internally and accepts all props that a standard div would.
+Renders a div internally and accepts all props that a standard [motion.div](https://www.framer.com/docs/component/) would.
 
 ```tsx
 interface ScrollItemProps extends HTMLMotionProps<"div"> {
