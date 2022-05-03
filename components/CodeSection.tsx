@@ -56,8 +56,8 @@ const CodeSection: FC<CodeSectionProps> = ({
 
   const updateFiles = async (files: any) => {
     for (const filePath in files) {
+      await timeout(50);
       sandpack.updateFile(filePath, files[filePath]);
-      await timeout(0);
     }
   };
 

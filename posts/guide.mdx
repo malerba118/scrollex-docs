@@ -6,11 +6,11 @@ import CodeSection, { CodeSectionProvider } from "../components/CodeSection";
 import * as files from "../components/files";
 
 <CodeSectionProvider>
-<CodeSection>
+<CodeSection files={files.base}>
 
 # Guide
 
-Scrollex is a react library that let's you build beautiful scroll experiences using minimal code.
+Scrollex is a react library that lets you build beautiful scroll experiences using minimal code.
 
 If you want to install scrollex in your own react project, you can do so with npm or yarn.
 
@@ -21,7 +21,7 @@ npm install --save scrollex framer-motion
 However for this guide, scrollex is pre-installed in the sandbox to the right and all you have to do is read, scroll, and observe.
 
 </CodeSection>
-<CodeSection files={files.base}>
+<CodeSection files={{ '/App.js': files.sectionZero['/App.js'] }}>
 
 To get started with scrollex, we need to add a `Scroll.Container` to hold all of our scrollable content.
 
