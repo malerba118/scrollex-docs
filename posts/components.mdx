@@ -193,11 +193,17 @@ type KeyframesObj = Record<
     skewX?: number | string;
     skewY?: number | string;
     opacity?: number | string;
+    backgroundColor?: string;
+    color?: string;
   }
 >;
 ```
 
-One thing to note is that scrollex only permits us to set `transform` and `opacity` properties because they're widely known to be the [safest properties to animate](https://web.dev/animations-guide/).
+One thing to note is that scrollex restricts the properties which we can animate via keyframes for performance reasons.
+
+`transform` and `opacity` are widely known to be the [safest properties to animate](https://web.dev/animations-guide/).
+
+Scrollex also permits the animation of `color` and `backgroundColor`.
 
 To better understand how keyframes work, consider the following example.
 
@@ -346,6 +352,8 @@ type SpringConfigs = {
   skewX?: SpringOptions;
   skewY?: SpringOptions;
   opacity?: SpringOptions;
+  backgroundColor?: SpringOptions;
+  color?: SpringOptions;
 };
 
 type SpringOptions = {
@@ -379,26 +387,32 @@ const DEFAULT_SPRING_CONFIGS = {
   scale: {
     mass: 0.05,
     damping: 20,
+    stiffness: 100,
   },
   scaleX: {
     mass: 0.05,
     damping: 20,
+    stiffness: 100,
   },
   scaleY: {
     mass: 0.05,
     damping: 20,
+    stiffness: 100,
   },
   scaleZ: {
     mass: 0.05,
     damping: 20,
+    stiffness: 100,
   },
   skewX: {
     mass: 0.1,
     damping: 20,
+    stiffness: 100,
   },
   skewY: {
     mass: 0.1,
     damping: 20,
+    stiffness: 100,
   },
   rotateX: {
     mass: 0.05,
@@ -418,6 +432,17 @@ const DEFAULT_SPRING_CONFIGS = {
   opacity: {
     mass: 0.1,
     damping: 20,
+    stiffness: 100,
+  },
+  backgroundColor: {
+    mass: 0.05,
+    damping: 7.5,
+    stiffness: 100,
+  },
+  color: {
+    mass: 0.05,
+    damping: 7.5,
+    stiffness: 100,
   },
 };
 ```
