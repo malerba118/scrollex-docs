@@ -40,13 +40,13 @@ Next we'll partition our content in to different sections.
 
 ```jsx
 <Scroll.Container scrollAxis="y" className="h-screen">
-  <Scroll.Section className="h-full center bg-1">
+  <Scroll.Section className="h-screen center bg-1">
     <h1>Page One</h1>
   </Scroll.Section>
-  <Scroll.Section className="h-full center bg-2">
+  <Scroll.Section className="h-screen center bg-2">
     <h1>Page Two</h1>
   </Scroll.Section>
-  <Scroll.Section className="h-full center bg-1">
+  <Scroll.Section className="h-screen center bg-1">
     <h1>Page Three</h1>
   </Scroll.Section>
 </Scroll.Container>
@@ -82,17 +82,17 @@ const keyframes = {
 export default function App() {
   return (
     <Scroll.Container scrollAxis="y" className="h-screen">
-      <Scroll.Section className="h-full center bg-1">
+      <Scroll.Section className="h-screen center bg-1">
         <Scroll.Item keyframes={keyframes.heading}>
           <h1>Page One</h1>
         </Scroll.Item>
       </Scroll.Section>
-      <Scroll.Section className="h-full center bg-2">
+      <Scroll.Section className="h-screen center bg-2">
         <Scroll.Item keyframes={keyframes.heading}>
           <h1>Page Two</h1>
         </Scroll.Item>
       </Scroll.Section>
-      <Scroll.Section className="h-full center bg-1">
+      <Scroll.Section className="h-screen center bg-1">
         <Scroll.Item keyframes={keyframes.heading}>
           <h1>Page Three</h1>
         </Scroll.Item>
@@ -135,7 +135,9 @@ const keyframes = {
 };
 ```
 
-Now each heading will begin animating only after we scroll down to its containing section.
+As you can see, keyframes can either be a keyframes object or, in this case, a keyframes function that returns the keyframes object.
+
+With the above change, each heading will begin animating only after we scroll down to its containing section.
 
 Here `section.topAt("container-bottom")` will return the number of pixels the user has to scroll for the top edge of the section to intersect the bottom edge of the container.
 
@@ -145,7 +147,7 @@ But how do we know which section we're dealing with?
 
 Well `Scroll.Item` can only be used within `Scroll.Section`, so the keyframes function passed to a `Scroll.Item` will always reference the item's containing section.
 
-The cool thing about this is that scrollex is tracking the section bounds internally and if the section's size/position happen to change, scrollex will automatically recalculate our keyframes.
+The cool thing about this is that scrollex is tracking the section bounds internally and if the section's size/position happen to change, scrollex will automatically recalculate our keyframes!
 
 At the moment our headings move at a constant speed across the screen while we scroll, but what if we wanted them to move in quickly, then stick in the center for a bit, and then move out quickly?
 
@@ -232,7 +234,7 @@ With this we're guaranteed that no matter the screen size, our headings will alw
 
 #### Wrapping Up
 
-We hope this guide has been helpful and we encourage you to check out the [components reference](/components) and the [examples](/examples) to see more of what's possible with scrollex!
+We hope this guide has been helpful and we encourage you to check out the [api reference](/reference) and the [examples](/examples) to see more of what's possible with scrollex!
 
 </CodeSection>
 </CodeSectionProvider>

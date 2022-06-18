@@ -19,14 +19,6 @@ h1 {
   width: 100vw;
 }
 
-.h-full {
-  height: 100%;
-}
-
-.w-full {
-  width: 100%;
-}
-
 .center {
   display: flex !important;
   justify-content: center;

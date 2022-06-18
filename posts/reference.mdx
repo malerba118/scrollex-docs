@@ -55,7 +55,7 @@ Specifies the scroll direction of the container.
 
 #### throttleAmount
 
-Throttle duration in milliseconds used to throttle scroll events and prevent animation interruptions.
+Throttle duration in milliseconds used to throttle scroll events which helps prevent animation interruptions.
 You may wish to set this to `0` if animations are too sluggish/choppy for your liking. Default value is `90`.
 
 ```jsx
@@ -68,7 +68,9 @@ You may wish to set this to `0` if animations are too sluggish/choppy for your l
 
 # Scroll.Section
 
-Used to partition scrollable content and track important keyframes.
+Used to partition scrollable content and help you identify important keyframes. Sections perform layout measurements when they detect a change in their dimensions and then notify animations.
+
+Because sections monitor their dimensions, their heights are allowed to change dynamically. This means for example that a section with `height: auto` will be able to adapt to changes to its content that cause the section to grow/shrink.
 
 ### Usage
 
@@ -97,23 +99,7 @@ export default function App() {
 Renders a div internally and accepts all props that a standard [motion.div](https://www.framer.com/docs/component/) would.
 
 ```tsx
-interface ScrollSectionProps extends HTMLMotionProps<"div"> {
-  showOverflow?: boolean;
-}
-```
-
-#### showOverflow
-
-If `true`, allows section contents to overflow its bounds. If `false`, content that overflows the section bounds will be hidden. Default value is `false`.
-
-**NOTE:** If you wish to use **sticky position** elements inside of a section, it's imperative to set this to `true`.
-
-```jsx
-<Scroll.Container scrollAxis="y">
-  <Scroll.Section showOverflow={true} className="h-[200vh]">
-    <h1 className="sticky top-0">I will stick</h1>
-  </Scroll.Section>
-</Scroll.Container>
+interface ScrollSectionProps extends HTMLMotionProps<"div"> {}
 ```
 
 # Scroll.Item
@@ -137,17 +123,17 @@ const keyframes = {
 export default function App() {
   return (
     <Scroll.Container scrollAxis="y" className="h-screen">
-      <Scroll.Section className="h-full center">
+      <Scroll.Section className="h-screen center">
         <Scroll.Item keyframes={keyframes.heading}>
           <h1>Page One</h1>
         </Scroll.Item>
       </Scroll.Section>
-      <Scroll.Section className="h-full center">
+      <Scroll.Section className="h-screen center">
         <Scroll.Item keyframes={keyframes.heading}>
           <h1>Page Two</h1>
         </Scroll.Item>
       </Scroll.Section>
-      <Scroll.Section className="h-full center">
+      <Scroll.Section className="h-screen center">
         <Scroll.Item keyframes={keyframes.heading}>
           <h1>Page Three</h1>
         </Scroll.Item>
@@ -222,17 +208,17 @@ const keyframes = {
 export default function App() {
   return (
     <Scroll.Container scrollAxis="y" className="h-screen">
-      <Scroll.Section className="h-full center">
+      <Scroll.Section className="h-screen center">
         <Scroll.Item keyframes={keyframes.heading}>
           <h1>Page One</h1>
         </Scroll.Item>
       </Scroll.Section>
-      <Scroll.Section className="h-full center">
+      <Scroll.Section className="h-screen center">
         <Scroll.Item keyframes={keyframes.heading}>
           <h1>Page Two</h1>
         </Scroll.Item>
       </Scroll.Section>
-      <Scroll.Section className="h-full center">
+      <Scroll.Section className="h-screen center">
         <Scroll.Item keyframes={keyframes.heading}>
           <h1>Page Three</h1>
         </Scroll.Item>
@@ -262,17 +248,17 @@ const keyframes = {
 export default function App() {
   return (
     <Scroll.Container scrollAxis="y" className="h-screen">
-      <Scroll.Section className="h-full center">
+      <Scroll.Section className="h-screen center">
         <Scroll.Item keyframes={keyframes.heading}>
           <h1>Page One</h1>
         </Scroll.Item>
       </Scroll.Section>
-      <Scroll.Section className="h-full center">
+      <Scroll.Section className="h-screen center">
         <Scroll.Item keyframes={keyframes.heading}>
           <h1>Page Two</h1>
         </Scroll.Item>
       </Scroll.Section>
-      <Scroll.Section className="h-full center">
+      <Scroll.Section className="h-screen center">
         <Scroll.Item keyframes={keyframes.heading}>
           <h1>Page Three</h1>
         </Scroll.Item>
@@ -470,7 +456,7 @@ const headings = ["Page One", "Page Two", "Page Three"];
 export default function App() {
   return (
     <Scroll.Container scrollAxis="y" className="h-screen">
-      <Scroll.Section className="h-[500vh]" showOverflow>
+      <Scroll.Section className="h-[500vh]">
         <div className="sticky top-0 h-screen center">
           {headings.map((heading, index) => (
             <Scroll.Item
@@ -489,3 +475,103 @@ export default function App() {
 ```
 
 Through this method we can create a staggered effect as we scroll, revealing array items one after another.
+
+# useScrollState(callback)
+
+`useScrollState` lets you derive state from changes to the animation context.
+
+The callback passed to `useScrollState` will be invoked whenever any of its parameters (animation context values) change.
+
+Whenever the return value of the callback changes, the new return value will be set as react state, which in turn will cause the host component to rerender.
+
+For this reason the return value of the callback must be a primitive value so that scrollex can use referential equality to determine if the return value has changed.
+
+### Usage
+
+```jsx
+import { useScrollState } from "scrollex";
+
+const useScrollDirection = () => {
+  return useScrollState(({ velocity }) => {
+    if (velocity > 0) {
+      return "down";
+    } else if (velocity < 0) {
+      return "up";
+    } else {
+      return "static";
+    }
+  });
+};
+```
+
+### Signature
+
+`useScrollState` requires one parameter, a callback that should return a derived value.
+
+Note that the state will always be `undefined` on the intial render as scrollex must perform layout measurements before it will invoke the callback.
+
+```tsx
+function useScrollState<T extends StateType>(
+  callback: ScrollStateFn<T>
+) => T | undefined;
+
+type StateType = string | number | boolean | null | undefined;
+
+type ScrollStateFn<T extends StateType> = (context: ScrollStateContext) => T;
+
+type ScrollStateContext = {
+  section: LayoutSection;
+  container: LayoutContainer;
+  maxScrollPosition: number;
+  position: number;
+  velocity: number;
+};
+```
+
+# useScrollValue(callback)
+
+`useScrollValue` returns a framer-motion `MotionValue` whose value is derived from changes to the animation context.
+
+The callback passed to `useScrollValue` will be invoked whenever any of its parameters (animation context values) change.
+
+Whenever the return value of the callback changes, the new return value will be set as the new value of the `MotionValue` that is returned from `useScrollValue`.
+
+This is useful for controling low-level animations outside of the react render loop.
+
+### Usage
+
+```jsx
+import { useScrollValue } from "scrollex";
+
+// Returns a MotionValue whose value ranges from [0, 1]
+const useSectionProgress = () => {
+  return useScrollValue(({ position, section, container }) => {
+    const sectionPosition = position - section.topAt("container-top");
+    const sectionScrollableHeight = section.height - container.height;
+    const progress = sectionPosition / sectionScrollableHeight;
+    return clamp(progress, 0, 1);
+  });
+};
+```
+
+### Signature
+
+`useScrollState` requires one parameter, a callback that should return a derived value.
+
+Note that the `MotionValue` will always have a value of `undefined` on the intial render as scrollex must perform layout measurements before it will invoke the callback.
+
+```tsx
+function useScrollValue<T extends number | string>(
+  callback: ScrollValueFn<T>
+) => MotionValue<T | undefined>;
+
+type ScrollValueFn<T extends number | string> = (context: ScrollValueContext) => T;
+
+type ScrollValueContext = {
+  section: LayoutSection;
+  container: LayoutContainer;
+  maxScrollPosition: number;
+  position: number;
+  velocity: number;
+};
+```

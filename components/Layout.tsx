@@ -35,8 +35,8 @@ const Layout: FC<LayoutProps> = ({ children }) => {
           <Link as={NextLink} href="/" color="white">
             Guide
           </Link>
-          <Link as={NextLink} href="/components" color="white">
-            Components
+          <Link as={NextLink} href="/reference" color="white">
+            API Reference
           </Link>
           <Link as={NextLink} href="/examples" color="white">
             Examples
