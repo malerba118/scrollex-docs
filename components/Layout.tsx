@@ -1,5 +1,13 @@
 import { FC } from "react";
-import { chakra, Heading, HStack, Box, Icon, Link } from "@chakra-ui/react";
+import {
+  chakra,
+  Heading,
+  HStack,
+  Box,
+  Icon,
+  Link,
+  Text,
+} from "@chakra-ui/react";
 import NextLink from "next/link";
 import { RiGithubFill } from "react-icons/ri";
 
@@ -36,7 +44,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
             Guide
           </Link>
           <Link as={NextLink} href="/reference" color="white">
-            API Reference
+            Reference
           </Link>
           <Link as={NextLink} href="/examples" color="white">
             Examples

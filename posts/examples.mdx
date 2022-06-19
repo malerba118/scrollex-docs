@@ -2,6 +2,33 @@ import { Wrap, Box } from "@chakra-ui/react";
 import InlineCode from "../components/InlineCode";
 import CodeBlock from "../components/CodeBlock";
 
+<Box display={props.page === 1 ? 'block' : 'none'}>
+
+# Simple Product Demo
+
+Here's an example of a clipping effect combined with a simple rotation.
+
+<iframe
+  src="https://codesandbox.io/embed/scrollex-product-demo-6omvyq?fontsize=14&hidenavigation=1&theme=dark&view=preview&codemirror=1&hidedevtools=1"
+  style={{
+    width: "100%",
+    height: 500,
+    border: 0,
+    borderRadius: 12,
+    overflow: "hidden",
+    margin: "2rem auto",
+    backgroundColor: '#040404'
+
+}}
+title="scrollex-fixed-position-demo"
+allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+loading="lazy"
+
+> </iframe>
+
+<br />
+
 # Fixed Position Content
 
 Here's an example of fixed position content that animates on scroll.
@@ -75,6 +102,10 @@ Here's a springy list that demonstrates usage of `Scroll.Item`'s `data` prop.
 
 <br />
 
+</Box>
+
+<Box display={props.page === 2 ? 'block' : 'none'}>
+
 # Staggered Reveal
 
 Here's another list that demonstrates usage of `Scroll.Item`'s `data` prop.
@@ -123,3 +154,55 @@ Here's an example of content that scrolls along the x axis.
 </iframe>
 
 <br />
+
+# useScrollState
+
+Here's an example of useScrollState.
+
+<iframe
+  src="https://codesandbox.io/embed/scrollex-usescrollstate-62xbv3?fontsize=14&hidenavigation=1&theme=dark&view=preview&codemirror=1&hidedevtools=1"
+  style={{
+    width: "100%",
+    height: 500,
+    border: 0,
+    borderRadius: 12,
+    overflow: "hidden",
+    margin: "2rem auto",
+    backgroundColor: '#040404'
+
+}}
+title="scrollex-fixed-position-demo"
+allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+loading="lazy"
+
+> </iframe>
+
+<br />
+
+# useScrollValue
+
+Here's an example of useScrollValue.
+
+<iframe
+  src="https://codesandbox.io/embed/use-scroll-value-l95fsb?fontsize=14&hidenavigation=1&theme=dark&view=preview&codemirror=1&hidedevtools=1"
+  style={{
+    width: "100%",
+    height: 500,
+    border: 0,
+    borderRadius: 12,
+    overflow: "hidden",
+    margin: "2rem auto",
+    backgroundColor: '#040404'
+
+}}
+title="scrollex-fixed-position-demo"
+allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+loading="lazy"
+
+> </iframe>
+
+<br />
+
+</Box>
