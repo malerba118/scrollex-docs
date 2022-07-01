@@ -1,19 +1,10 @@
 // 1. import `extendTheme` function
 import { extendTheme, ThemeConfig } from "@chakra-ui/react";
-import "@fontsource/inter/800.css";
-import "@fontsource/inter/700.css";
-import "@fontsource/inter/400.css";
-import "@fontsource/poppins/800.css";
-import "@fontsource/poppins/700.css";
-import "@fontsource/poppins/400.css";
-import "@fontsource/karla/800.css";
-import "@fontsource/karla/700.css";
-import "@fontsource/karla/400.css";
-// import "@fontsource/ibm-plex-mono/800.css";
-import "@fontsource/ibm-plex-mono/700.css";
-import "@fontsource/ibm-plex-mono/400.css";
-import "@fontsource/ubuntu-mono/400.css";
-import "@fontsource/limelight/400.css";
+// import "@fontsource/poppins/800.css";
+// import "@fontsource/poppins/700.css";
+// import "@fontsource/poppins/400.css";
+// import "@fontsource/ubuntu-mono/400.css";
+// import "@fontsource/limelight/400.css";
 
 // 2. Add your color mode config
 const config: ThemeConfig = {
